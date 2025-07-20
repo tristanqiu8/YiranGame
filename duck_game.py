@@ -23,6 +23,34 @@ BLACK = (0, 0, 0)
 # 游戏时钟
 clock = pygame.time.Clock()
 
+# 音效系统
+sounds_enabled = True
+try:
+    pygame.mixer.init()
+    # 预留音效加载位置
+    collect_sound = None
+    background_music = None
+    
+    # 尝试加载音效文件
+    try:
+        # collect_sound = pygame.mixer.Sound("sounds/collect.wav")
+        # collect_sound.set_volume(0.5)
+        pass
+    except:
+        print("Warning: Could not load collect sound")
+    
+    # 尝试加载背景音乐
+    try:
+        # pygame.mixer.music.load("sounds/background.mp3")
+        # pygame.mixer.music.set_volume(0.3)
+        # pygame.mixer.music.play(-1)  # -1 表示循环播放
+        pass
+    except:
+        print("Warning: Could not load background music")
+except:
+    sounds_enabled = False
+    print("Warning: Sound system could not be initialized")
+
 class Duck:
     def __init__(self):
         self.x = WINDOW_WIDTH // 2
@@ -125,6 +153,9 @@ def main():
             if check_collision(duck, food):
                 foods.remove(food)
                 score += food.score  # 使用食物的分数
+                # 播放收集音效
+                if sounds_enabled and collect_sound:
+                    collect_sound.play()
                 # 添加新食物
                 foods.append(Food())
         
